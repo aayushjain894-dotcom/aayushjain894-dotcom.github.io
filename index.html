@@ -1,72 +1,580 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aayush Jain | Cybersecurity</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Courier New', monospace;
-            background: #0a0a0a;
-            color: #00ff41;
-            min-height: 100vh;
-            padding: 40px 20px;
-        }
-        .container { max-width: 800px; margin: 0 auto; }
-        .header { border-bottom: 1px solid #00ff41; padding-bottom: 20px; margin-bottom: 30px; }
-        h1 { font-size: 2em; }
-        .subtitle { color: #888; margin-top: 5px; }
-        section { margin-bottom: 30px; }
-        h2 { color: #00ff41; margin-bottom: 10px; font-size: 1em; text-transform: uppercase; letter-spacing: 2px; }
-        p { color: #ccc; line-height: 1.7; }
-        .links a {
-            color: #00ff41;
-            text-decoration: none;
-            margin-right: 20px;
-            border: 1px solid #00ff41;
-            padding: 5px 12px;
-            font-size: 0.9em;
-        }
-        .links a:hover { background: #00ff41; color: #000; }
-        .rooms { color: #ccc; }
-        .rooms li { margin-bottom: 5px; list-style: none; }
-        .rooms li::before { content: "✓ "; color: #00ff41; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aayush Jain — Cybersecurity</title>
+<style>
+  :root{
+    --bg: #08090d;
+    --bg-elevated: #0e1015;
+    --surface: #13161d;
+    --surface-hover: #181c25;
+    --border: rgba(255,255,255,0.08);
+    --border-strong: rgba(255,255,255,0.16);
+    --text-primary: #f5f5f7;
+    --text-secondary: #98989d;
+    --text-tertiary: #6e6e73;
+    --accent: #4d7fff;
+    --accent-bright: #6f97ff;
+    --accent-soft: rgba(77,127,255,0.12);
+    --accent-glow: rgba(77,127,255,0.35);
+    --ok: #34d399;
+    --font-display: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Helvetica, Arial, sans-serif;
+    --font-body: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Helvetica, Arial, sans-serif;
+    --font-mono: ui-monospace, 'SF Mono', 'Cascadia Code', Menlo, Consolas, monospace;
+    --ease: cubic-bezier(.22,1,.36,1);
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+
+  html{ scroll-behavior:smooth; }
+
+  body{
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--text-primary);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  a{ color:inherit; }
+
+  .container{
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  /* ---------- NAV ---------- */
+  nav{
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding: 20px 32px;
+    background: rgba(8,9,13,0);
+    border-bottom: 1px solid transparent;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    transition: background .4s var(--ease), border-color .4s var(--ease);
+  }
+  nav.scrolled{
+    background: rgba(8,9,13,0.72);
+    border-bottom: 1px solid var(--border);
+  }
+  .logo{
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: -0.01em;
+  }
+  .nav-links{
+    display:flex;
+    gap: 32px;
+    list-style:none;
+  }
+  .nav-links a{
+    font-size: 13px;
+    color: var(--text-secondary);
+    text-decoration:none;
+    transition: color .25s var(--ease);
+  }
+  .nav-links a:hover{ color: var(--text-primary); }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position: relative;
+    min-height: 100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding: 140px 32px 80px;
+    overflow: hidden;
+  }
+  .blob{
+    position:absolute;
+    width: 900px;
+    height: 900px;
+    top: -300px;
+    left: 50%;
+    transform: translateX(-50%);
+    background:
+      radial-gradient(circle at 35% 35%, var(--accent-glow), transparent 60%),
+      radial-gradient(circle at 65% 60%, rgba(52,211,153,0.18), transparent 55%);
+    filter: blur(90px);
+    opacity: 0.55;
+    animation: drift 16s ease-in-out infinite;
+    pointer-events:none;
+  }
+  @keyframes drift{
+    0%,100%{ transform: translateX(-50%) translateY(0) scale(1); }
+    50%{ transform: translateX(-46%) translateY(30px) scale(1.06); }
+  }
+
+  .eyebrow{
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent-bright);
+    background: var(--accent-soft);
+    border: 1px solid rgba(77,127,255,0.3);
+    padding: 6px 14px;
+    border-radius: 20px;
+    margin-bottom: 28px;
+    opacity:0;
+    animation: rise .8s var(--ease) forwards;
+  }
+
+  h1{
+    font-family: var(--font-display);
+    font-size: clamp(48px, 9vw, 96px);
+    font-weight: 650;
+    letter-spacing: -0.03em;
+    line-height: 1.02;
+    opacity:0;
+    animation: rise .8s var(--ease) .1s forwards;
+  }
+
+  .role-line{
+    display:flex;
+    align-items:center;
+    gap: 10px;
+    margin-top: 22px;
+    font-family: var(--font-mono);
+    font-size: clamp(15px, 2vw, 19px);
+    color: var(--text-secondary);
+    opacity:0;
+    animation: rise .8s var(--ease) .2s forwards;
+  }
+  .cursor{
+    display:inline-block;
+    width: 9px;
+    height: 1.1em;
+    background: var(--accent-bright);
+    animation: blink 1.1s step-end infinite;
+    border-radius: 1px;
+  }
+  @keyframes blink{ 0%,49%{opacity:1;} 50%,100%{opacity:0;} }
+
+  .hero-sub{
+    max-width: 560px;
+    margin-top: 24px;
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    opacity:0;
+    animation: rise .8s var(--ease) .3s forwards;
+  }
+
+  .hero-cta{
+    display:flex;
+    gap: 14px;
+    margin-top: 40px;
+    opacity:0;
+    animation: rise .8s var(--ease) .4s forwards;
+  }
+
+  @keyframes rise{
+    from{ opacity:0; transform: translateY(18px); }
+    to{ opacity:1; transform: translateY(0); }
+  }
+
+  .btn{
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 500;
+    padding: 12px 22px;
+    border-radius: 980px;
+    text-decoration:none;
+    display:inline-flex;
+    align-items:center;
+    gap: 8px;
+    transition: transform .3s var(--ease), background .3s var(--ease), border-color .3s var(--ease);
+  }
+  .btn-primary{
+    background: var(--accent);
+    color: #fff;
+    border: 1px solid var(--accent);
+  }
+  .btn-primary:hover{
+    background: var(--accent-bright);
+    transform: translateY(-2px);
+  }
+  .btn-secondary{
+    background: transparent;
+    color: var(--text-primary);
+    border: 1px solid var(--border-strong);
+  }
+  .btn-secondary:hover{
+    border-color: var(--accent);
+    color: var(--accent-bright);
+    transform: translateY(-2px);
+  }
+
+  /* ---------- SECTIONS ---------- */
+  section{
+    padding: 120px 0;
+    border-top: 1px solid var(--border);
+  }
+  .section-head{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    margin-bottom: 48px;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .section-label{
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+  }
+  h2{
+    font-family: var(--font-display);
+    font-size: clamp(28px, 4vw, 40px);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+
+  .reveal{
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity .8s var(--ease), transform .8s var(--ease);
+  }
+  .reveal.visible{
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* About */
+  .about-grid{
+    display:grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 60px;
+  }
+  .about-grid p{
+    font-size: 18px;
+    line-height: 1.75;
+    color: var(--text-secondary);
+  }
+  .about-grid strong{ color: var(--text-primary); font-weight: 560; }
+
+  /* Focus cards */
+  .focus-grid{
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  .card{
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 32px 28px;
+    transition: transform .4s var(--ease), border-color .4s var(--ease), background .4s var(--ease);
+  }
+  .card:hover{
+    transform: translateY(-6px);
+    border-color: var(--border-strong);
+    background: var(--surface-hover);
+  }
+  .card .icon{
+    width: 40px; height: 40px;
+    margin-bottom: 20px;
+    color: var(--accent-bright);
+  }
+  .card h3{
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    letter-spacing: -0.01em;
+  }
+  .card p{
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+  }
+
+  /* Progress */
+  .progress-panel{
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 40px;
+  }
+  .progress-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .progress-count{
+    font-family: var(--font-display);
+    font-size: 40px;
+    font-weight: 650;
+  }
+  .progress-count span{
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text-tertiary);
+    margin-left: 8px;
+  }
+  .bar-track{
+    height: 4px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 32px;
+  }
+  .bar-fill{
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--accent), var(--ok));
+    border-radius: 4px;
+    transition: width 1.2s var(--ease);
+  }
+  .room-list{
+    list-style:none;
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px 24px;
+  }
+  .room-list li{
+    display:flex;
+    align-items:center;
+    gap: 12px;
+    font-size: 15px;
+    color: var(--text-primary);
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .check{
+    width: 18px; height: 18px;
+    flex-shrink:0;
+    border-radius: 50%;
+    background: rgba(52,211,153,0.15);
+    color: var(--ok);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .check svg{ width: 10px; height: 10px; }
+
+  /* Contact */
+  .contact-panel{
+    text-align:center;
+    background: radial-gradient(circle at 50% 0%, var(--accent-soft), transparent 60%), var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 72px 32px;
+  }
+  .contact-panel h2{ margin-bottom: 14px; }
+  .contact-panel p{
+    color: var(--text-secondary);
+    font-size: 16px;
+    max-width: 440px;
+    margin: 0 auto 36px;
+  }
+  .contact-links{
+    display:flex;
+    justify-content:center;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+
+  footer{
+    padding: 40px 32px 60px;
+    text-align:center;
+    font-size: 13px;
+    color: var(--text-tertiary);
+  }
+
+  @media (max-width: 720px){
+    .nav-links{ display:none; }
+    .about-grid{ grid-template-columns: 1fr; gap: 24px; }
+    .focus-grid{ grid-template-columns: 1fr; }
+    .room-list{ grid-template-columns: 1fr; }
+    section{ padding: 80px 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+    .blob{ animation: none; }
+  }
+</style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>Aayush Jain</h1>
-            <p class="subtitle">Cybersecurity Student | York University</p>
-        </div>
 
-        <section>
-            <h2>About</h2>
-            <p>Cybersecurity student at York University, with an Advanced Diploma in 
-            Computer Engineering Technology from Seneca Polytechnic. Passionate about 
-            offensive security and ethical hacking — currently building hands-on skills 
-            through TryHackMe and documenting everything on GitHub.</p>
-        </section>
+  <nav id="nav">
+    <div class="logo">Aayush Jain</div>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#focus">Focus</a></li>
+      <li><a href="#progress">Progress</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
 
-        <section>
-            <h2>TryHackMe Progress</h2>
-            <ul class="rooms">
-                <li>Offensive Security Intro</li>
-                <li>Defensive Security Intro</li>
-                <li>Careers in Cyber</li>
-                <li>Search Skills</li>
-            </ul>
-        </section>
-
-        <section>
-            <h2>Links</h2>
-            <div class="links">
-                <a href="https://github.com/aayushjain894-dotcom" target="_blank">GitHub</a>
-                <a href="https://tryhackme.com/p/aayushjain894">TryHackMe</a>
-                <a href="mailto:aayushj@my.yorku.ca">Contact</a>
-            </div>
-        </section>
+  <header class="hero">
+    <div class="blob"></div>
+    <div class="eyebrow">York University · Computer Security</div>
+    <h1>Aayush Jain</h1>
+    <div class="role-line">Cybersecurity Student<span class="cursor"></span></div>
+    <p class="hero-sub">
+      Learning to break systems so I can be trusted to defend them.
+      Currently building hands-on offensive security skills, one TryHackMe room at a time.
+    </p>
+    <div class="hero-cta">
+      <a class="btn btn-primary" href="https://github.com/aayushjain894-dotcom" target="_blank">View GitHub</a>
+      <a class="btn btn-secondary" href="https://tryhackme.com/p/aayushjain894" target="_blank">TryHackMe Profile</a>
     </div>
+  </header>
+
+  <section id="about">
+    <div class="container">
+      <div class="about-grid">
+        <div class="section-head" style="margin-bottom:0;">
+          <div>
+            <div class="section-label">01 — About</div>
+          </div>
+        </div>
+        <p class="reveal">
+          I'm a <strong>Computer Security</strong> student at York University, building on an
+          <strong>Advanced Diploma in Computer Engineering Technology</strong> from Seneca Polytechnic.
+          My focus is offensive security — understanding how systems fail so I can help
+          prevent it. I document everything I learn in public: writeups, labs, and projects,
+          all on GitHub.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section id="focus">
+    <div class="container">
+      <div class="section-head reveal">
+        <div>
+          <div class="section-label">02 — Focus</div>
+          <h2>Where I'm building depth</h2>
+        </div>
+      </div>
+      <div class="focus-grid">
+        <div class="card reveal">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z"/>
+          </svg>
+          <h3>Offensive Security</h3>
+          <p>Practicing exploitation, reconnaissance, and attack methodology through guided and unguided labs.</p>
+        </div>
+        <div class="card reveal">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="12" cy="12" r="8"/>
+            <circle cx="12" cy="12" r="2.4" fill="currentColor" stroke="none"/>
+          </svg>
+          <h3>Defensive Security</h3>
+          <p>Studying detection, monitoring, and incident response from the defender's side of the fence.</p>
+        </div>
+        <div class="card reveal">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="3" y="4" width="18" height="16" rx="2"/>
+            <path d="M7 9l3 3-3 3M13 15h4"/>
+          </svg>
+          <h3>Applied Fundamentals</h3>
+          <p>Sharpening research and search skills that underpin every real investigation and CTF.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="progress">
+    <div class="container">
+      <div class="section-head reveal">
+        <div>
+          <div class="section-label">03 — Progress</div>
+          <h2>TryHackMe rooms completed</h2>
+        </div>
+      </div>
+      <div class="progress-panel reveal">
+        <div class="progress-top">
+          <div class="progress-count" id="count">0<span>/ 4 rooms</span></div>
+        </div>
+        <div class="bar-track"><div class="bar-fill" id="bar"></div></div>
+        <ul class="room-list">
+          <li><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6"/></svg></span>Offensive Security Intro</li>
+          <li><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6"/></svg></span>Defensive Security Intro</li>
+          <li><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6"/></svg></span>Careers in Cyber</li>
+          <li><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6"/></svg></span>Search Skills</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="container">
+      <div class="contact-panel reveal">
+        <h2>Let's connect</h2>
+        <p>Open to co-op opportunities, collaboration, and conversations about offensive security.</p>
+        <div class="contact-links">
+          <a class="btn btn-primary" href="https://github.com/aayushjain894-dotcom" target="_blank">GitHub</a>
+          <a class="btn btn-secondary" href="https://tryhackme.com/p/aayushjain894" target="_blank">TryHackMe</a>
+          <a class="btn btn-secondary" href="mailto:aayushj@my.yorku.ca">Email</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>© 2026 Aayush Jain. Built and secured, line by line.</footer>
+
+<script>
+  // Nav blur on scroll
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  // Scroll reveal
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if(e.isIntersecting){
+        e.target.classList.add('visible');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  revealEls.forEach(el => io.observe(el));
+
+  // Progress bar count-up, triggered when panel enters view
+  const panel = document.querySelector('.progress-panel');
+  const countEl = document.getElementById('count');
+  const barEl = document.getElementById('bar');
+  const total = 4;
+  let animated = false;
+  const panelObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if(e.isIntersecting && !animated){
+        animated = true;
+        barEl.style.width = '100%';
+        let n = 0;
+        const step = () => {
+          n++;
+          countEl.innerHTML = n + '<span>/ ' + total + ' rooms</span>';
+          if(n < total) requestAnimationFrame(() => setTimeout(step, 150));
+        };
+        step();
+        panelObserver.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.4 });
+  panelObserver.observe(panel);
+</script>
+
 </body>
 </html>
